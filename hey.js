@@ -31,6 +31,7 @@ angular.module('hey', [])
 
     /**
      * Removes listeners from the scope regardless of the scope to which they were added.
+     *
      * If a callback is provided it will only remove that single callback, otherwise all
      * listeners listening to the given event will be removed.
      *
@@ -39,15 +40,17 @@ angular.module('hey', [])
      */
     function stop(eventName, callback) {
       var group = listeners[eventName];
-      var i = group.length - 1;
+      var i = group ? group.length - 1 : false;
 
       function shouldBeDeleted(listener) {
         return callback ? listener.cb === callback : true;
       }
 
-      for (; i > -1; i--) {
-        if (shouldBeDeleted(group[i])) {
-          group.splice(i, 1)[0].destroy();
+      if(group) {
+        for (; i > -1; i--) {
+          if (shouldBeDeleted(group[i])) {
+            group.splice(i, 1)[0].destroy();
+          }
         }
       }
     }
